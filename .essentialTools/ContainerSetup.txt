@@ -1,0 +1,43 @@
+***************IMPORTANT LINKS BEGIN**************
+
+https://docs.microsoft.com/en-us/dynamics365/business-central/dev-itpro/developer/devenv-running-container-development
+https://docs.microsoft.com/en-us/dynamics365/business-central/dev-itpro/developer/devenv-get-started-container-sandbox
+https://blogs.msdn.microsoft.com/freddyk/2018/03/20/navcontainerhelper-1/
+https://hub.docker.com/r/microsoft/bcsandbox/
+https://github.com/microsoft/navcontainerhelper
+https://blogs.msdn.microsoft.com/nav/2018/04/13/enabling-premium-experience-in-business-central-sandbox-containers/
+https://blogs.msdn.microsoft.com/freddyk/2018/03/22/navcontainerhelper-setup-cside-development-environment-with-source-code-management/
+https://blogs.msdn.microsoft.com/freddyk/2017/11/03/multiple-ways-to-run-a-nav-on-docker-image/
+https://github.com/Microsoft/nav-docker
+https://github.com/Microsoft/nav-docker/blob/master/NAV%20on%20Docker%20E2E.pdf
+
+
+***************IMPORTANT LINKS END**************
+
+
+Install Docker for windows
+open cmd with administrator right
+execute "docker run -e accept_eula=Y -m 4G microsoft/bcsandbox"
+open powershell ise as administrator
+execute "install-module navcontainerhelper -force" in powershell
+Use new-navcontainer -accept_eula -containerName LocalBCSandbox -imageName microsoft/bcsandbox -includeCSide
+
+or
+
+$mylicense = "c:\temp\mylicense.flf"
+$oldimagename = "microsoft/bcsandbox:latest"
+$oldcontainer = "LocalBCSandbox"
+
+if ($credential -eq $null -or $credential -eq [System.Management.Automation.PSCredential]::Empty) {
+    $credential = get-credential -UserName $env:USERNAME `
+                                 -Message "Please enter your Windows credentials."
+}
+
+New-NavContainer -accept_eula `
+                 -containerName $oldcontainer `
+                 -auth Windows `
+                 -credential $credential `
+                 -includeCSide `
+                 -licensefile $mylicense `
+                 -imageName $oldimagename `
+                 -updateHosts 
